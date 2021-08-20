@@ -38,7 +38,7 @@ def singleDicom2nifti(input_path, output_path, verbose=False):
         and create nii file
 
         input_path: path to the folder containing .dcm files
-        output_path: path to save .nii files
+        output_path: path to save t1c.nii.gz files
         verbose: bool, to print logs 
     """
     if not os.path.exists(input_path): raise ValueError("Path doesn't exist")
@@ -62,7 +62,9 @@ def convertDcm2nifti(path_json, output_dir, verbose=False):
 
     for key in path_json.keys():
         input_path = path_json[key]
+        # output_path = os.path.join(output_dir, key + 't1c.nii.gz.gz')
         output_path = os.path.join(output_dir, key + '.nii.gz')
         singleDicom2nifti(input_path, output_path, verbose)
+
     
 

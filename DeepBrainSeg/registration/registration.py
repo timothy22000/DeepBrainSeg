@@ -145,7 +145,9 @@ class Coregistration(object):
                                             sitk.sitkLinear, 0.0, 
                                             moving_image.GetPixelID())
             
+            # sitk.WriteImage(moving_resampled, os.path.join(coregistration_path, key+'t1c.nii.gz.gz'))
             sitk.WriteImage(moving_resampled, os.path.join(coregistration_path, key+'.nii.gz'))
+
             sitk.WriteTransform(final_transform, os.path.join(transform_path, key+'.tfm'))
             # Write Fixed image in nii.gz
             if isotropic:
@@ -153,7 +155,7 @@ class Coregistration(object):
                 moving_resized = self.resize_sitk_3D(moving_resampled)
                 sitk.WriteImage(moving_resized, os.path.join(isotropic_path, key+'.nii.gz'))
 
-        sitk.WriteImage(fixed_image, os.path.join(coregistration_path, fixed_name+'.nii.gz'))            
+        sitk.WriteImage(fixed_image, os.path.join(coregistration_path, fixed_name+'.nii.gz'))
         if isotropic:
             fixed_resized = self.resize_sitk_3D(fixed_image)
             sitk.WriteImage(fixed_resized, os.path.join(isotropic_path, fixed_name+'.nii.gz'))

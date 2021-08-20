@@ -199,7 +199,7 @@ def save_volume(volume, affine, path):
     # volume = np.uint8(volume)
     # volume.set_data_dtype(np.uint8)
     volume = nib.Nifti1Image(volume, affine)
-    nib.save(volume, path +'.nii.gz')
+    nib.save(volume, path +'t1c.nii.gz.gz')
     pass
 
 

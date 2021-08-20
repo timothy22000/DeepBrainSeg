@@ -35,7 +35,7 @@ setuptools.setup(
          'numpy==1.18.5',
          'pandas==0.25.3',
          'scipy==1.4.1',
-         'pydensecrf==1.0rc3',
+         # 'pydensecrf==1.0rc3',
          'pyradiomics==3.0',
          'scikit-image==0.15',
     	 'dicom2nifti==2.2.10',

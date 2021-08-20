@@ -8,7 +8,7 @@ import sys
 import subprocess
 
 
-def get_bet_mask(vol_path, device = 0):
+def get_bet_mask(vol_path, device = 'cpu'):
     """
     We make use of bet framework for generalized skull stripping
     
@@ -38,8 +38,9 @@ def bet_skull_stripping(t1_path, save_path):
     returns: maskvolume (numpy uint8 type) 
     """
     mask = get_bet_mask(t1_path)
+    os.makedirs(save_path, exist_ok=True)
 
-    os.makedirs(os.path.basename(save_path), exist_ok=True)
+    # os.makedirs(os.path.basename(save_path), exist_ok=True)
     nib_obj = nib.load(t1_path)
     vol = nib_obj.get_data()
     affine = nib_obj.affine
