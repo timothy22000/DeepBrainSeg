@@ -12,7 +12,7 @@ segmentor = tumorSeg()
 dcm_subject_root = '../sample_volume/dcm/all_patients'
 dcm_subjects = [os.path.join(dcm_subject_root, sub) for sub in os.listdir(dcm_subject_root)]
 
-for subject in dcm_subject_root:
+for subject in dcm_subjects:
     seqs = os.listdir(subject)
     json = {}
     
@@ -39,38 +39,39 @@ for subject in dcm_subject_root:
 		# 	os.path.join('../sample_results/skull_strip/{}/'.format(subject.split('/').pop())),
         #                 device = 'cpu')
 
-        get_bet_mask(os.path.join('../sample_results/nifty/', subject.split('/').pop(), key + '.nii.gz'),
-                     device='cpu')
-        # subject = subject.split('/').pop()
-        # bet_skull_stripping(os.path.join('../sample_results/nifty/', subject.split('/').pop(), key + '.nii.gz'),
-        #                     os.path.join('../sample_results/nifty/', subject, key+'.nii.gz'),
-        #                     os.path.join('../sample_results/nifty/', subject, key+'.nii.gz')
-        #                     )
+        # get_bet_mask(os.path.join('../sample_results/nifty/', subject.split('/').pop(), key + '.nii.gz'),
+        #              device='cpu')
+        subject = subject.split('/').pop()
+        bet_skull_stripping(os.path.join('../sample_results/nifty/', subject.split('/').pop(), key + '.nii.gz'),
+                            os.path.join('../sample_results/nifty/', subject, key+'.nii.gz'),
+                            os.path.join('../sample_results/skull_strip_2/{}/{}.nii.gz'.format(subject, key))
+                            )
         # get_bet_mask(os.path.join('../sample_results/nifty/', subject.split('/').pop(), key+'t1c.nii.gz.gz'),
         #     os.path.join('../sample_results/skull_strip/{}/'.format(subject.split('/').pop()))
         #              )
 
     # Coregistration
-    # moving_imgs = {'t1': os.path.join('../sample_results/skull_strip/{}/{}.nii.gz'.format(subject.split('/').pop(), 't1')),
-    #                 't2': os.path.join('../sample_results/skull_strip/{}/{}.nii.gz'.format(subject.split('/').pop(), 't2')),
-    #                 'flair':os.path.join('../sample_results/skull_strip/{}/{}.nii.gz'.format(subject.split('/').pop(), 'flair'))
-    #                 }
-    # fixed_img =  os.path.join('../sample_results/skull_strip/{}/{}.nii.gz'.format(subject.split('/').pop(), 't1c'))
-
-
-    moving_imgs = {'t1': os.path.join('../sample_results/nifty/{}/{}.nii.gz'.format(subject.split('/').pop(), 't1')),
-                    't2': os.path.join('../sample_results/nifty/{}/{}.nii.gz'.format(subject.split('/').pop(), 't2')),
-                    'flair':os.path.join('../sample_results/nifty/{}/{}.nii.gz'.format(subject.split('/').pop(), 'flair'))
+    moving_imgs = {'t1': os.path.join('../sample_results/skull_strip/{}/{}.nii.gz'.format(subject.split('/').pop(), 't1')),
+                    't2': os.path.join('../sample_results/skull_strip/{}/{}.nii.gz'.format(subject.split('/').pop(), 't2')),
+                    'flair':os.path.join('../sample_results/skull_strip/{}/{}.nii.gz'.format(subject.split('/').pop(), 'flair'))
                     }
-    fixed_img =  os.path.join('../sample_results/nifty/{}/{}.nii.gz'.format(subject.split('/').pop(), 't1c'))
+    fixed_img =  os.path.join('../sample_results/skull_strip/{}/{}.nii.gz'.format(subject.split('/').pop(), 't1c'))
+
+
+    # moving_imgs = {'t1': os.path.join('../sample_results/nifty/{}/{}.nii.gz'.format(subject.split('/').pop(), 't1')),
+    #                 't2': os.path.join('../sample_results/nifty/{}/{}.nii.gz'.format(subject.split('/').pop(), 't2')),
+    #                 'flair':os.path.join('../sample_results/nifty/{}/{}.nii.gz'.format(subject.split('/').pop(), 'flair'))
+    #                 }
+    # fixed_img =  os.path.join('../sample_results/nifty/{}/{}.nii.gz'.format(subject.split('/').pop(), 't1c'))
     coreg.register_patient(moving_images = moving_imgs,
                             fixed_image  = fixed_img,
                             save_path  = os.path.join('../sample_results/coreg/{}'.format(subject.split('/').pop())))
-    
+
     # Segmentation
     segmentor.get_segmentation(os.path.join('../sample_results/coreg/{}/isotropic/t1.nii.gz'.format(subject.split('/').pop())),
-                                os.path.join('../sample_results/coreg/{}/isotropic/t2.nii.gz'.format(subject.split('/').pop())), 
-                                os.path.join('../sample_results/coreg/{}/isotropic/t1c.nii.gz'.format(subject.split('/').pop())), 
+                                os.path.join('../sample_results/coreg/{}/isotropic/t2.nii.gz'.format(subject.split('/').pop())),
+                                os.path.join('../sample_results/coreg/{}/isotropic/t1c.nii.gz'.format(subject.split('/').pop())),
                                 os.path.join('../sample_results/coreg/{}/isotropic/flair.nii.gz'.format(subject.split('/').pop())),
                                 os.path.join('../sample_results/segmentations/{}/'.format(subject.split('/').pop())))
+
 

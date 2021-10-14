@@ -39,12 +39,13 @@ for subject in dcm_subjects:
         # get_bet_mask(os.path.join('../sample_results/nifty/', subject.split('/').pop(), key+'t1c.nii.gz.gz'),
 		# 	os.path.join('../sample_results/skull_strip/{}/'.format(subject.split('/').pop())),
         #                 device = 'cpu')
-        get_bet_mask(os.path.join('../rsna_miccai_results/nifty/', subject.split('/').pop(), key + 't1c.nii.gz.gz'),
+        get_bet_mask(os.path.join('../rsna_miccai_results/nifty/', subject.split('/').pop(), key + '.nii.gz'),
                      device='cpu')
 
-        bet_skull_stripping(os.path.join('../rsna_miccai_results/nifty/', subject.split('/').pop(), key+'t1c.nii.gz.gz'),
-                            os.path.join('../rsna_miccai_results/skull_strip/{}/'.format(subject.split('/').pop()))
-                            )
+        # Don't need to worry about skull stripping for the Kaggle challenge
+        # bet_skull_stripping(os.path.join('../rsna_miccai_results/nifty/', subject.split('/').pop(), key+'t1c.nii.gz.gz'),
+        #                     os.path.join('../rsna_miccai_results/skull_strip/{}/'.format(subject.split('/').pop()))
+        #                     )
 		# 	os.path.join('../sample_results/skull_strip/{}/'.format(subject.split('/').pop())))
         # get_bet_mask(os.path.join('../sample_results/nifty/', subject.split('/').pop(), key+'t1c.nii.gz.gz'),
         #     os.path.join('../sample_results/skull_strip/{}/'.format(subject.split('/').pop()))
@@ -59,11 +60,13 @@ for subject in dcm_subjects:
     coreg.register_patient(moving_images = moving_imgs,
                             fixed_image  = fixed_img,
                             save_path  = os.path.join('../rsna_miccai_results/coreg/{}'.format(subject.split('/').pop())))
-    
-    # Segmentation
+
+    # # Segmentation
     segmentor.get_segmentation(os.path.join('../rsna_miccai_results/coreg/{}/isotropic/t1.nii.gz'.format(subject.split('/').pop())),
                                 os.path.join('../rsna_miccai_results/coreg/{}/isotropic/t2.nii.gz'.format(subject.split('/').pop())),
                                 os.path.join('../rsna_miccai_results/coreg/{}/isotropic/t1c.nii.gz'.format(subject.split('/').pop())),
                                 os.path.join('../rsna_miccai_results/coreg/{}/isotropic/flair.nii.gz'.format(subject.split('/').pop())),
                                 os.path.join('../rsna_miccai_results/segmentations/{}/'.format(subject.split('/').pop())))
+    # segmentor = tumorSeg(quick=True)
+    # segmentor.get_segmentation_brats(os.path.join('../rsna_miccai_results/nifty/', subject.split('/').pop()))
 

@@ -97,7 +97,7 @@ class Coregistration(object):
         image = resampler.Execute(image)
         return image
 
-    def register_patient(self, moving_images, 
+    def register_patient(self, moving_images,
                             fixed_image, 
                             save_path,
                             save_transform=True,

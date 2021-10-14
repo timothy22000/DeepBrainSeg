@@ -137,7 +137,8 @@ class tumorSeg():
 		flair_v    = flair volume (numpy array)
 		brain_mask = brain, whole tumor mask (numpy array, output of ANTs pieline)
         """
-
+        print(t1.shape)
+        print(brain_mask.shape)
         t1    = preprocessing.standardize(t1,    brain_mask)
         t1ce  = preprocessing.standardize(t1ce,   brain_mask)
         t2    = preprocessing.standardize(t2,    brain_mask)
@@ -371,11 +372,15 @@ class tumorSeg():
         """
 
         name  = path.split("/")[-1] + "_"
-        flair_path =  os.path.join(path, name + 'flair.nii.gz')
-        t1_path    =  os.path.join(path, name + 't1.nii.gz')
-        t1ce_path  =  os.path.join(path, name + 't1ce.nii.gz')
-        t2_path    =  os.path.join(path, name + 't2.nii.gz')
-        
+        # flair_path =  os.path.join(path, name + 'flair.nii.gz')
+        # t1_path    =  os.path.join(path, name + 't1.nii.gz')
+        # t1ce_path  =  os.path.join(path, name + 't1ce.nii.gz')
+        # t2_path    =  os.path.join(path, name + 't2.nii.gz')
+
+        flair_path =  os.path.join(path, 'flair.nii.gz')
+        t1_path    =  os.path.join(path, 't1.nii.gz')
+        t1ce_path  =  os.path.join(path, 't1c.nii.gz')
+        t2_path    =  os.path.join(path, 't2.nii.gz')
         print ("[INFO: DeepBrainSeg] (" + strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime()) + ") Working on: ", path)
 
         return self.get_segmentation(t1_path, t2_path, t1ce_path, flair_path, path)

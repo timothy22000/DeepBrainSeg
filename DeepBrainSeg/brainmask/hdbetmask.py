@@ -26,10 +26,10 @@ def get_bet_mask(vol_path, device = 'cpu'):
         print ("Mask Already exists")
 
     os.system('rm ' + os.path.join(os.path.dirname(vol_path), filename +'_bet.nii.gz')) 
-    mask = np.uint8(nib.load(mask_path).get_data())
+: st    mask = np.uint8(nib.load(mask_path).get_data())
     return mask
 
-def bet_skull_stripping(t1_path, save_path):
+def bet_skull_stripping(mask_path, t1_path, save_path):
     """
     We make use of bet framework for generalized skull stripping
     
@@ -37,15 +37,20 @@ def bet_skull_stripping(t1_path, save_path):
     saves the mask in the same location as t1 data directory
     returns: maskvolume (numpy uint8 type) 
     """
-    mask = get_bet_mask(t1_path)
-    os.makedirs(save_path, exist_ok=True)
+    mask = get_bet_mask(mask_path)
+    try:
+        os.makedirs(save_path, exist_ok=True)
+    except FileExistsError as e:
+        pass
 
     # os.makedirs(os.path.basename(save_path), exist_ok=True)
     nib_obj = nib.load(t1_path)
     vol = nib_obj.get_data()
     affine = nib_obj.affine
+    header = nib_obj.header
     volume = np.uint8(vol*mask)
-    volume = nib.Nifti1Image(volume, affine)
-    volume.set_data_dtype(np.uint8)
-    nib.save(volume, save_path)
+    volume = nib.Nifti2Image(volume, affine, header)
+    # volume.set_data_dtype(np.uint8)
+    volume.to_filename(save_path)
+    # nib.save(volume, save_path)
     return volume
